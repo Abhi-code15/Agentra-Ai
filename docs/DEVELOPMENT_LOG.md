@@ -1,0 +1,56 @@
+# AGENTRA — Development Log
+
+## Milestone 0: Pre-Development Planning & System Architecture
+- **Date:** 2026-11-12
+- **Objective:** Establish the comprehensive engineering specification, product requirements, database architecture, API contracts, AI integration design, security threat model, testing strategy, and ADRs prior to application implementation.
+- **Work Completed:**
+  - Verified repository state (initial directory completely clean and empty).
+  - Authored `docs/PRD.md` covering product goals, user personas, expense policy business scenario, and scope boundaries.
+  - Authored `docs/REQUIREMENTS.md` detailing functional and non-functional requirements, data contracts, and invariant rules.
+  - Authored `docs/ARCHITECTURE.md` establishing modular monolith layering, component responsibilities, and Mermaid sequence diagrams.
+  - Authored `docs/ERD.md`, `docs/DATABASE.md`, `docs/DATA_DICTIONARY.md`, and `docs/DB_DECISIONS.md` defining PostgreSQL schema, UUID PKs, constraints, indexes, and transaction boundaries.
+  - Authored `docs/API.md` and `docs/API_ERROR_CATALOG.md` specifying REST v1 contracts, standard envelopes, and machine error codes.
+  - Authored `docs/AI/AI_ARCHITECTURE.md`, `docs/AI/PROMPT_CATALOG.md`, and `docs/AI/MODEL_EVALUATION.md` establishing Gemini 2.5 Flash structured extraction and delimiter injection defenses.
+  - Authored `docs/AGENT/AGENT_DESIGN.md`, `docs/AGENT/TOOL_REGISTRY.md`, and `docs/AGENT/EXECUTION_FLOW.md` detailing the 4-step controlled agent orchestrator and step telemetry.
+  - Authored `docs/SECURITY/THREAT_MODEL.md` (STRIDE) and `docs/SECURITY/SECURITY_CONTROLS.md` specifying Argon2id, JWT/HttpOnly refresh token rotation, BOLA defenses, and file safety.
+  - Authored `docs/TESTING.md` defining unit, integration, security, and acceptance test harnesses.
+  - Authored `docs/DEPLOYMENT.md` and `docs/OBSERVABILITY.md` outlining Docker Compose, PowerShell workflows, and structured JSON logging.
+  - Authored Architecture Decision Records: `ADR-001` through `ADR-008`.
+  - Conducted Task 9 Independent Principal Engineer Design Review (`docs/DESIGN_REVIEW.md`).
+- **Files Created:**
+  - `docs/PRD.md`
+  - `docs/REQUIREMENTS.md`
+  - `docs/ARCHITECTURE.md`
+  - `docs/ERD.md`
+  - `docs/DATABASE.md`
+  - `docs/DATA_DICTIONARY.md`
+  - `docs/DB_DECISIONS.md`
+  - `docs/API.md`
+  - `docs/API_ERROR_CATALOG.md`
+  - `docs/SECURITY/THREAT_MODEL.md`
+  - `docs/SECURITY/SECURITY_CONTROLS.md`
+  - `docs/AI/AI_ARCHITECTURE.md`
+  - `docs/AI/PROMPT_CATALOG.md`
+  - `docs/AI/MODEL_EVALUATION.md`
+  - `docs/AGENT/AGENT_DESIGN.md`
+  - `docs/AGENT/TOOL_REGISTRY.md`
+  - `docs/AGENT/EXECUTION_FLOW.md`
+  - `docs/TESTING.md`
+  - `docs/DEPLOYMENT.md`
+  - `docs/OBSERVABILITY.md`
+  - `docs/ADR/ADR-001-modular-monolith.md`
+  - `docs/ADR/ADR-002-postgresql-primary-database.md`
+  - `docs/ADR/ADR-003-sqlalchemy-2.md`
+  - `docs/ADR/ADR-004-jwt-cookie-auth.md`
+  - `docs/ADR/ADR-005-gemini-provider-abstraction.md`
+  - `docs/ADR/ADR-006-controlled-agent-orchestration.md`
+  - `docs/ADR/ADR-007-private-local-document-storage.md`
+  - `docs/ADR/ADR-008-deterministic-compliance-engine.md`
+  - `docs/DEVELOPMENT_LOG.md`
+  - `docs/CHANGELOG.md`
+  - `docs/DESIGN_REVIEW.md`
+- **Known Limitations:**
+  - OCR for scanned raster images deferred to post-MVP.
+  - Multi-tenant organization hierarchy deferred to post-MVP.
+- **Next Steps:**
+  - Await developer approval on Milestone 0 design deliverables and proceed to Milestone 1: Repository Foundation.
