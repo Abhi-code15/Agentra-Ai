@@ -1,19 +1,61 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Documents from './pages/Documents';
+import DocumentDetail from './pages/DocumentDetail';
+import AnalysisDetail from './pages/AnalysisDetail';
+import ReviewQueue from './pages/ReviewQueue';
+import AuditLedger from './pages/AuditLedger';
 
-function App() {
+export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-sm border border-slate-200 text-center">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">Agentra Platform</h1>
-        <p className="text-slate-600 text-sm mb-4">
-          Intelligent Document Analysis. Transparent Decisions. Human-Controlled Governance.
-        </p>
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-          Milestone 1 Foundation Active
-        </span>
-      </div>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="documents" element={<Documents />} />
+            <Route path="documents/:id" element={<DocumentDetail />} />
+            <Route path="analyses/:id" element={<AnalysisDetail />} />
+            <Route
+              path="reviews"
+              element={
+                <ProtectedRoute allowedRoles={['REVIEWER', 'ADMIN']}>
+                  <ReviewQueue />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="audit"
+              element={
+                <ProtectedRoute allowedRoles={['REVIEWER', 'ADMIN']}>
+                  <AuditLedger />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+
+          {/* Catch-all redirect */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
-
-export default App;
