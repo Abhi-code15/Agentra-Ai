@@ -1,5 +1,6 @@
 """Document upload, listing, and inspection API endpoints."""
 import math
+import os
 import uuid
 from typing import Optional
 from fastapi import APIRouter, Depends, File, Query, UploadFile, status
@@ -28,7 +29,9 @@ async def upload_document(
 ) -> SuccessResponse[DocumentUploadResponse]:
     """Uploads a policy document, checks magic bytes, stores privately, and extracts text."""
     file_bytes = await file.read()
-    filename = file.filename or "policy_document.pdf"
+    raw_filename = file.filename or "policy_document.pdf"
+    # Defend against path traversal in reported filename
+    filename = os.path.basename(raw_filename.replace("\\", "/")) or "policy_document.pdf"
 
     service = DocumentService(db)
     document, page_count = service.upload_document(
