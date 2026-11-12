@@ -28,8 +28,10 @@ class GeminiClient:
 
     CANDIDATE_MODELS = [
         "gemini-3.1-flash-lite",
+        "gemini-3.5-flash-lite",
+        "gemini-3.6-flash",
+        "gemini-3.7-flash",
         "gemini-omni-flash-preview",
-        "gemini-3.5-flash",
     ]
 
     def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None):
