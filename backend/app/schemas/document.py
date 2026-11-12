@@ -12,6 +12,7 @@ class DocumentExtractionResponse(BaseModel):
     extractor_version: str
     page_count: int
     extraction_status: str
+    extracted_text: Optional[str] = None
     metadata: Dict[str, Any]
     created_at: datetime
 

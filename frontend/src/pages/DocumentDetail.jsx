@@ -163,8 +163,8 @@ export default function DocumentDetail() {
     );
   }
 
-  const primaryExtraction = extractions.length > 0 ? extractions[0] : null;
-  const rawText = primaryExtraction?.extracted_text || '';
+  const primaryExtraction = extractions.length > 0 ? extractions[0] : (doc?.extraction || null);
+  const rawText = primaryExtraction?.extracted_text || doc?.extraction?.extracted_text || '';
   const filteredText = searchFilter
     ? rawText
         .split('\n')

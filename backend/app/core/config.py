@@ -39,7 +39,7 @@ class Settings(BaseSettings):
 
     # Gemini AI
     GEMINI_API_KEY: str = Field(default="dummy_key", description="Google Gemini API key")
-    GEMINI_MODEL: str = Field(default="gemini-3.5-flash", description="Gemini model name")
+    GEMINI_MODEL: str = Field(default="gemini-3.1-flash-lite", description="Gemini model name")
 
     # Storage
     STORAGE_DIRECTORY: str = Field(default="storage/documents", description="Storage directory for uploaded files")

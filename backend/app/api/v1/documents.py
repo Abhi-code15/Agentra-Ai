@@ -2,7 +2,7 @@
 import math
 import os
 import uuid
-from typing import Optional
+from typing import List, Optional
 from fastapi import APIRouter, Depends, File, Query, UploadFile, status
 from sqlalchemy.orm import Session
 
@@ -103,6 +103,7 @@ def get_document(
             extractor_version=extraction.extractor_version,
             page_count=extraction.page_count,
             extraction_status=extraction.extraction_status,
+            extracted_text=extraction.extracted_text,
             metadata=extraction.metadata_json,
             created_at=extraction.created_at,
         )
@@ -121,6 +122,34 @@ def get_document(
         extraction=extraction_schema,
     )
     return SuccessResponse(data=detail_data)
+
+
+@router.get("/{document_id}/extractions", response_model=SuccessResponse[List[DocumentExtractionResponse]])
+def get_document_extractions(
+    document_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> SuccessResponse[List[DocumentExtractionResponse]]:
+    """Returns extractions including extracted text for a specific document."""
+    service = DocumentService(db)
+    document = service.get_document(document_id, current_user)
+    extraction = service.doc_repo.get_extraction_by_document_id(document.id)
+
+    if not extraction:
+        return SuccessResponse(data=[])
+
+    schema = DocumentExtractionResponse(
+        id=extraction.id,
+        document_id=extraction.document_id,
+        extractor_name=extraction.extractor_name,
+        extractor_version=extraction.extractor_version,
+        page_count=extraction.page_count,
+        extraction_status=extraction.extraction_status,
+        extracted_text=extraction.extracted_text,
+        metadata=extraction.metadata_json,
+        created_at=extraction.created_at,
+    )
+    return SuccessResponse(data=[schema])
 
 
 @router.delete("/{document_id}", response_model=SuccessResponse[dict])
