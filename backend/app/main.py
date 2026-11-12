@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
+from app.api.v1 import api_v1_router
 from app.core.config import settings
 from app.core.exceptions import AgentraException
 from app.core.logging import correlation_id_ctx, logger, setup_logging
@@ -127,6 +128,10 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
             "meta": {"request_id": request_id},
         },
     )
+
+
+# Mount API v1 Routers
+app.include_router(api_v1_router, prefix=settings.API_V1_PREFIX)
 
 
 # System Probes
