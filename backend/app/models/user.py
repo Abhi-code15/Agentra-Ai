@@ -56,6 +56,15 @@ class User(Base, TimestampMixin):
         "Document",
         back_populates="owner",
     )
+    organization_memberships: Mapped[List["OrganizationMember"]] = relationship(
+        "OrganizationMember",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+    claims: Mapped[List["Claim"]] = relationship(
+        "Claim",
+        back_populates="employee",
+    )
 
 
 class RefreshSession(Base):

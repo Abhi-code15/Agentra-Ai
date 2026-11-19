@@ -19,8 +19,8 @@ export default function AIChatDrawer({ isOpen, onClose, documentId = null, docum
     {
       role: 'assistant',
       content: documentTitle
-        ? `Hello! I am your Agentra Intelligence Assistant. I have indexed **${documentTitle}**. You can ask me about approval limits, required documentation, deadlines, or compliance issues.`
-        : 'Hello! I am your Agentra Intelligence Assistant. Ask me anything about your uploaded documents, compliance rules, or reimbursement policies.',
+        ? `Hello! I am your Agentra Assistant. I have indexed **${documentTitle}**. You can ask me about limits, required receipts, deadlines, or rules.`
+        : 'Hello! I am your Agentra Assistant. Ask me anything about your company policies, limits, deadlines, or document requirements.',
     },
   ]);
   const [input, setInput] = useState('');
@@ -31,15 +31,16 @@ export default function AIChatDrawer({ isOpen, onClose, documentId = null, docum
 
   const suggestedQuestions = documentId
     ? [
-        'What are the manager approval thresholds?',
-        'Are itemized receipts mandatory for all claims?',
-        'What is the submission deadline for expenses?',
-        'List all non-reimbursable expense items.',
+        'What are the manager approval limits?',
+        'Are receipts required for all items?',
+        'What is the submission deadline?',
+        'Which expenses are not allowed?',
       ]
     : [
-        'What compliance rules are currently enforced?',
-        'How does the 4-step agent orchestrator work?',
-        'What are standard reimbursement tiers?',
+        'What are the reimbursement limits for meals and hotel?',
+        'Are receipts required for all claims?',
+        'What is the deadline to submit expenses?',
+        'How does the policy verification work?',
       ];
 
   const scrollToBottom = () => {
@@ -129,14 +130,14 @@ export default function AIChatDrawer({ isOpen, onClose, documentId = null, docum
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-white">Agentra AI Assistant</h2>
+              <h2 className="text-sm font-semibold text-white">Agentra Assistant</h2>
               <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                Gemini 3.5
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                Online
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
-              {documentTitle ? `Context: ${documentTitle.slice(0, 30)}...` : 'Enterprise Document Intelligence'}
+              {documentTitle ? `Document: ${documentTitle.slice(0, 30)}...` : 'Policy & Request Helper'}
             </p>
           </div>
         </div>
@@ -228,7 +229,7 @@ export default function AIChatDrawer({ isOpen, onClose, documentId = null, docum
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-bounce [animation-delay:0.2s]"></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-bounce [animation-delay:0.4s]"></span>
               </div>
-              <span>Analyzing policy rules with Gemini 3.5...</span>
+              <span>Checking company rules and policy...</span>
             </div>
           </div>
         )}

@@ -99,6 +99,15 @@ class ReviewService:
                 message="This review task has already been completed by another reviewer.",
             )
 
+        # If review task is associated with an employee claim, update claim status accordingly
+        if task.claim_id:
+            claim_status = "APPROVED" if decision == "APPROVED" else ("REJECTED" if decision == "REJECTED" else "REVISION_REQUESTED")
+            from app.models.claim import Claim
+            claim = self.db.query(Claim).filter(Claim.id == task.claim_id).first()
+            if claim:
+                claim.status = claim_status
+                self.db.commit()
+
         # Audit Event Logging
         req_id_str = correlation_id_ctx.get()
         req_id = uuid.UUID(req_id_str) if req_id_str else uuid.uuid4()

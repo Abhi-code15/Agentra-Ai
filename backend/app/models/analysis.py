@@ -19,6 +19,8 @@ class AnalysisRun(Base):
         Index("idx_analysis_runs_document_created", "document_id", "created_at"),
         Index("idx_analysis_runs_requested_by", "requested_by"),
         Index("idx_analysis_runs_user_status", "requested_by", "status"),
+        Index("idx_analysis_runs_org_id", "organization_id"),
+        Index("idx_analysis_runs_claim_id", "claim_id"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
@@ -26,10 +28,20 @@ class AnalysisRun(Base):
         primary_key=True,
         default=uuid.uuid4,
     )
-    document_id: Mapped[uuid.UUID] = mapped_column(
+    organization_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("organizations.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    claim_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("claims.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    document_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("documents.id", ondelete="RESTRICT"),
-        nullable=False,
+        nullable=True,
     )
     requested_by: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -85,7 +97,9 @@ class AnalysisRun(Base):
     )
 
     # Relationships
-    document: Mapped["Document"] = relationship("Document", back_populates="analyses")
+    document: Mapped[Optional["Document"]] = relationship("Document", back_populates="analyses")
+    organization: Mapped[Optional["Organization"]] = relationship("Organization")
+    claim: Mapped[Optional["Claim"]] = relationship("Claim", foreign_keys=[claim_id])
     user: Mapped["User"] = relationship("User")
     steps: Mapped[List["AnalysisStep"]] = relationship(
         "AnalysisStep",

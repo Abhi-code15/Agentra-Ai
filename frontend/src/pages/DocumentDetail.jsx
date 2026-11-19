@@ -198,17 +198,17 @@ export default function DocumentDetail() {
           <button
             onClick={handleStartAnalysis}
             disabled={analyzing}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {analyzing ? (
               <>
                 <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Executing Agent Orchestrator...</span>
+                <span>Extracting Policy Rules...</span>
               </>
             ) : (
               <>
                 <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Run Compliance Scan</span>
+                <span>Extract Policy Rules</span>
               </>
             )}
           </button>
@@ -238,25 +238,13 @@ export default function DocumentDetail() {
                 <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
                   {doc.mime_type}
                 </span>
-                <span
-                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium ${
-                    doc.document_status === 'READY_FOR_ANALYSIS'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : doc.document_status === 'OCR_REQUIRED'
-                      ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                      : 'bg-slate-100 text-slate-700 border border-slate-200'
-                  }`}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      doc.document_status === 'READY_FOR_ANALYSIS' ? 'bg-emerald-500' : 'bg-amber-500'
-                    }`}
-                  ></span>
-                  {doc.document_status.replace(/_/g, ' ')}
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Ready to Verify Claims
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-1">
-                Uploaded on {new Date(doc.created_at).toLocaleString()} • ID: {doc.id}
+                Uploaded on {new Date(doc.created_at).toLocaleString()}
               </p>
             </div>
           </div>
@@ -284,20 +272,20 @@ export default function DocumentDetail() {
 
           <div className="bg-slate-50/70 p-3 rounded-lg border border-slate-100">
             <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
-              Extractor Engine
+              Standard Format
             </span>
             <span className="text-sm font-semibold text-slate-800 mt-0.5 block">
-              {primaryExtraction?.extractor_name || 'PyMuPDF'} v1.24
+              Company PDF Policy
             </span>
           </div>
 
           <div className="bg-slate-50/70 p-3 rounded-lg border border-slate-100">
             <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
-              Integrity Check
+              Verification State
             </span>
             <div className="flex items-center gap-1.5 mt-0.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-              <span className="text-xs font-semibold text-emerald-700">SHA-256 Verified</span>
+              <span className="text-xs font-semibold text-emerald-700">Verified & Ingested</span>
             </div>
           </div>
         </div>
@@ -358,26 +346,24 @@ export default function DocumentDetail() {
           <div className="md:col-span-2 space-y-6">
             <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm space-y-4">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Governance Workflow
+                Company Reimbursement Policy Standard
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                This policy has been ingested and validated against magic byte integrity checks. You can
-                initiate an autonomous 4-step compliance evaluation using the Agent Orchestrator. The agent
-                will extract structured tiers, evaluate benchmark rules, and formulate review findings.
+                This document serves as your company&apos;s reimbursement policy standard. Click <strong>Extract Policy Rules</strong> above to identify spending allowances, receipt requirements, and approval limits that will automatically evaluate employee claims.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 <div className="p-3.5 rounded-lg border border-slate-100 bg-slate-50/50">
-                  <span className="text-[11px] font-semibold text-slate-700 block">Step 1 & 2: Extraction & Verification</span>
+                  <span className="text-[11px] font-semibold text-slate-700 block">1. Allowance & Rule Extraction</span>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Structured parameter extraction using Gemini 3.5 with delimiter isolation and verbatim quote checking.
+                    Detects daily meal limits, lodging caps, receipt mandates, and eligible categories from policy text.
                   </p>
                 </div>
 
                 <div className="p-3.5 rounded-lg border border-slate-100 bg-slate-50/50">
-                  <span className="text-[11px] font-semibold text-slate-700 block">Step 3 & 4: Compliance & Findings</span>
+                  <span className="text-[11px] font-semibold text-slate-700 block">2. Automatic Claim Verification</span>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Pure Python deterministic rule evaluation against reimbursement thresholds and receipt deadlines.
+                    Compares employee bills directly against company limits for instant verification and fast payout.
                   </p>
                 </div>
               </div>

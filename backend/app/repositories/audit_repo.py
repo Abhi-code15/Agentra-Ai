@@ -18,17 +18,19 @@ class AuditRepository:
         event_type: str,
         entity_type: str,
         entity_id: uuid.UUID,
-        request_id: uuid.UUID,
+        request_id: Optional[uuid.UUID] = None,
         actor_id: Optional[uuid.UUID] = None,
         analysis_run_id: Optional[uuid.UUID] = None,
+        organization_id: Optional[uuid.UUID] = None,
         event_metadata: Optional[Dict[str, Any]] = None,
     ) -> AuditEvent:
         event = AuditEvent(
             actor_id=actor_id,
+            organization_id=organization_id,
             event_type=event_type,
             entity_type=entity_type,
             entity_id=entity_id,
-            request_id=request_id,
+            request_id=request_id or uuid.uuid4(),
             analysis_run_id=analysis_run_id,
             event_metadata=event_metadata or {},
         )
@@ -36,6 +38,33 @@ class AuditRepository:
         self.db.commit()
         self.db.refresh(event)
         return event
+
+    def create_event(
+        self,
+        event_type: str = "SYSTEM_EVENT",
+        entity_type: str = "System",
+        entity_id: Optional[uuid.UUID] = None,
+        request_id: Optional[uuid.UUID] = None,
+        actor_id: Optional[uuid.UUID] = None,
+        analysis_run_id: Optional[uuid.UUID] = None,
+        organization_id: Optional[uuid.UUID] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        event_metadata: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> AuditEvent:
+        """Alias for record_event with metadata parameter compatibility."""
+        meta = metadata or event_metadata or {}
+        eid = entity_id or uuid.uuid4()
+        return self.record_event(
+            event_type=event_type,
+            entity_type=entity_type,
+            entity_id=eid,
+            request_id=request_id or uuid.uuid4(),
+            actor_id=actor_id,
+            analysis_run_id=analysis_run_id,
+            organization_id=organization_id,
+            event_metadata=meta,
+        )
 
     def list_events(
         self,

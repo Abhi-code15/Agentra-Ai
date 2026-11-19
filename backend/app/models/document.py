@@ -18,6 +18,8 @@ class Document(Base, TimestampMixin):
         ),
         Index("idx_documents_owner_created", "owner_id", "created_at"),
         Index("idx_documents_status", "document_status"),
+        Index("idx_documents_org_id", "organization_id"),
+        Index("idx_documents_type", "document_type"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
@@ -25,9 +27,19 @@ class Document(Base, TimestampMixin):
         primary_key=True,
         default=uuid.uuid4,
     )
+    organization_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("organizations.id", ondelete="CASCADE"),
+        nullable=True,
+    )
     owner_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("users.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    document_type: Mapped[str] = mapped_column(
+        String(50),
+        default="POLICY_DOCUMENT",
         nullable=False,
     )
     original_filename: Mapped[str] = mapped_column(
@@ -67,6 +79,7 @@ class Document(Base, TimestampMixin):
 
     # Relationships
     owner: Mapped["User"] = relationship("User", back_populates="documents")
+    organization: Mapped[Optional["Organization"]] = relationship("Organization")
     extractions: Mapped[List["DocumentExtraction"]] = relationship(
         "DocumentExtraction",
         back_populates="document",

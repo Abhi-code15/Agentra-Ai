@@ -102,7 +102,7 @@ export default function Register() {
 
           <div>
             <label className="block text-[11px] font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-              Governance Role
+              Portal Access Role
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -114,7 +114,7 @@ export default function Register() {
                     : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                Analyst (User)
+                Employee (User)
               </button>
               <button
                 type="button"
@@ -125,7 +125,7 @@ export default function Register() {
                     : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                Compliance Reviewer
+                Finance Reviewer
               </button>
             </div>
           </div>

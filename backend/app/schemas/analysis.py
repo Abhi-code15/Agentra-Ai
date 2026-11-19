@@ -30,8 +30,11 @@ class AnalysisStepResponse(BaseModel):
 
 class FindingResponse(BaseModel):
     id: uuid.UUID
-    analysis_run_id: uuid.UUID
+    organization_id: Optional[uuid.UUID] = None
+    claim_id: Optional[uuid.UUID] = None
+    analysis_run_id: Optional[uuid.UUID] = None
     rule_id: Optional[uuid.UUID] = None
+    policy_rule_id: Optional[uuid.UUID] = None
     finding_code: str
     title: str
     description: str

@@ -25,6 +25,9 @@ class Finding(Base, TimestampMixin):
         ),
         Index("idx_findings_run_id", "analysis_run_id"),
         Index("idx_findings_status_severity", "status", "severity"),
+        Index("idx_findings_org_id", "organization_id"),
+        Index("idx_findings_claim_id", "claim_id"),
+        Index("idx_findings_policy_rule_id", "policy_rule_id"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
@@ -32,14 +35,29 @@ class Finding(Base, TimestampMixin):
         primary_key=True,
         default=uuid.uuid4,
     )
-    analysis_run_id: Mapped[uuid.UUID] = mapped_column(
+    organization_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("organizations.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    claim_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("claims.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    analysis_run_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("analysis_runs.id", ondelete="RESTRICT"),
-        nullable=False,
+        nullable=True,
     )
     rule_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey("compliance_rules.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    policy_rule_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("policy_rules.id", ondelete="SET NULL"),
         nullable=True,
     )
     finding_code: Mapped[str] = mapped_column(
@@ -81,6 +99,8 @@ class Finding(Base, TimestampMixin):
     # Relationships
     analysis_run: Mapped["AnalysisRun"] = relationship("AnalysisRun", back_populates="findings")
     rule: Mapped[Optional["ComplianceRule"]] = relationship("ComplianceRule", back_populates="findings")
+    policy_rule: Mapped[Optional["PolicyRule"]] = relationship("PolicyRule", back_populates="findings")
+    claim: Mapped[Optional["Claim"]] = relationship("Claim", back_populates="findings")
     review_task: Mapped[Optional["ReviewTask"]] = relationship(
         "ReviewTask",
         back_populates="finding",

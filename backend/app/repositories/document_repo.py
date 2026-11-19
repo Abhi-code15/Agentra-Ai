@@ -123,3 +123,7 @@ class DocumentRepository:
     def get_extraction_by_document_id(self, document_id: uuid.UUID) -> Optional[DocumentExtraction]:
         stmt = select(DocumentExtraction).where(DocumentExtraction.document_id == document_id)
         return self.db.execute(stmt).scalar_one_or_none()
+
+    def get_extractions(self, document_id: uuid.UUID) -> List[DocumentExtraction]:
+        stmt = select(DocumentExtraction).where(DocumentExtraction.document_id == document_id)
+        return list(self.db.scalars(stmt).all())

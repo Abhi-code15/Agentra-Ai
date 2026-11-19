@@ -23,7 +23,9 @@ class ReviewDecisionRequest(BaseModel):
 
 class ReviewTaskResponse(BaseModel):
     id: uuid.UUID
-    finding_id: uuid.UUID
+    organization_id: Optional[uuid.UUID] = None
+    claim_id: Optional[uuid.UUID] = None
+    finding_id: Optional[uuid.UUID] = None
     assigned_reviewer_id: Optional[uuid.UUID] = None
     status: str
     decision: Optional[str] = None

@@ -18,6 +18,10 @@ api.interceptors.request.use((config) => {
   if (inMemoryToken && !config.headers.Authorization) {
     config.headers.Authorization = `Bearer ${inMemoryToken}`;
   }
+  const orgId = localStorage.getItem('agentra_org_id');
+  if (orgId && !config.headers['X-Organization-Id']) {
+    config.headers['X-Organization-Id'] = orgId;
+  }
   return config;
 });
 

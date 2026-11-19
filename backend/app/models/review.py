@@ -23,6 +23,8 @@ class ReviewTask(Base, TimestampMixin):
         ),
         Index("idx_review_tasks_status", "status"),
         Index("idx_review_tasks_assigned_reviewer", "assigned_reviewer_id"),
+        Index("idx_review_tasks_org_id", "organization_id"),
+        Index("idx_review_tasks_claim_id", "claim_id"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
@@ -30,10 +32,20 @@ class ReviewTask(Base, TimestampMixin):
         primary_key=True,
         default=uuid.uuid4,
     )
-    finding_id: Mapped[uuid.UUID] = mapped_column(
+    organization_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("findings.id", ondelete="RESTRICT"),
-        nullable=False,
+        ForeignKey("organizations.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    claim_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("claims.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    finding_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("findings.id", ondelete="CASCADE"),
+        nullable=True,
     )
     assigned_reviewer_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True),
@@ -59,5 +71,7 @@ class ReviewTask(Base, TimestampMixin):
     )
 
     # Relationships
-    finding: Mapped["Finding"] = relationship("Finding", back_populates="review_task")
+    finding: Mapped[Optional["Finding"]] = relationship("Finding", back_populates="review_task")
     reviewer: Mapped[Optional["User"]] = relationship("User")
+    organization: Mapped[Optional["Organization"]] = relationship("Organization")
+    claim: Mapped[Optional["Claim"]] = relationship("Claim", back_populates="review_tasks")

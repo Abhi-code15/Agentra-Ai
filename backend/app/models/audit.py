@@ -15,12 +15,18 @@ class AuditEvent(Base):
         Index("idx_audit_events_created", "created_at"),
         Index("idx_audit_events_entity", "entity_type", "entity_id"),
         Index("idx_audit_events_request_id", "request_id"),
+        Index("idx_audit_events_org_id", "organization_id"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
+    )
+    organization_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("organizations.id", ondelete="CASCADE"),
+        nullable=True,
     )
     actor_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True),
@@ -61,4 +67,5 @@ class AuditEvent(Base):
 
     # Relationships
     actor: Mapped[Optional["User"]] = relationship("User")
+    organization: Mapped[Optional["Organization"]] = relationship("Organization")
     analysis_run: Mapped[Optional["AnalysisRun"]] = relationship("AnalysisRun")

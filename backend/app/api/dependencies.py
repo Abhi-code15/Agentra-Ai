@@ -1,6 +1,6 @@
 """FastAPI authentication and role authorization dependencies."""
 import uuid
-from typing import List
+from typing import List, Optional
 from fastapi import Depends, Header, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
@@ -9,6 +9,8 @@ from app.core.exceptions import ForbiddenException, UnauthorizedException
 from app.core.security import decode_access_token
 from app.db.session import get_db
 from app.models.user import User
+from app.models.organization import Organization
+from app.repositories.organization_repo import OrganizationRepository
 from app.repositories.user_repo import UserRepository
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -52,6 +54,30 @@ def get_current_user(
         )
 
     return user
+
+
+def get_current_organization(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+    x_organization_id: Optional[str] = Header(None, alias="X-Organization-Id"),
+) -> Organization:
+    """Resolves the current organization tenant context, ensuring strict tenant isolation."""
+    org_repo = OrganizationRepository(db)
+
+    if x_organization_id:
+        try:
+            org_id = uuid.UUID(x_organization_id)
+            org = org_repo.get_by_id(org_id)
+            if org:
+                # Check user has access to this organization
+                membership = org_repo.get_membership(org.id, current_user.id)
+                if membership or current_user.role == "ADMIN":
+                    return org
+        except ValueError:
+            pass
+
+    # Fallback to default organization associated with the user
+    return org_repo.get_or_create_default_org(current_user)
 
 
 class RoleChecker:
